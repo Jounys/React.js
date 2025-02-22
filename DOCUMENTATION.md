@@ -1,143 +1,81 @@
-To-Do List (React) - Documentação
-Este projeto é uma lista de tarefas (To-Do List) desenvolvida com React.js, permitindo adicionar, remover e marcar tarefas como concluídas, com persistência de dados usando o LocalStorage.
+# Documentação Técnica - To-Do List (React)
 
-Tecnologias Utilizadas
-React.js: Biblioteca JavaScript para construção de interfaces de usuário.
-LocalStorage: Armazenamento local no navegador para persistência dos dados.
-CSS: Estilização da aplicação.
-Estrutura do Projeto
-scss
-Copiar
-Editar
-📁 src
-│── 📄 App.js       // Componente principal
-│── 📄 App.css      // Estilos globais
-│── 📁 components
-│   │── 📄 Card.js      // Componente de cada tarefa
-│   │── 📄 NewTask.js   // Componente para adicionar novas tarefas
-Funcionamento do App.js
-O componente App.js é responsável por gerenciar o estado da lista de tarefas, permitindo adicionar, concluir e remover tarefas, e sincroniza os dados com o LocalStorage.
+Este documento descreve a estrutura interna e as funcionalidades do projeto **To-Do List** desenvolvido com **React.js**.
 
-1. Estado das Tarefas
-O estado tarefas armazena a lista de tarefas, e a persistência é feita utilizando o LocalStorage:
+## Estrutura do Projeto
 
-jsx
-Copiar
-Editar
-const [tarefas, setTarefa] = useState(() => {
-  const dadosSalvos = localStorage.getItem("minhaLista");
-  return dadosSalvos ? JSON.parse(dadosSalvos) : [];
-});
-2. Salvamento no LocalStorage
-Sempre que o estado tarefas é atualizado, o LocalStorage também é atualizado para manter os dados persistentes:
+📁 src │── 📄 App.js // Componente principal que gerencia o estado e lógica da aplicação. │── 📄 App.css // Arquivo de estilo global da aplicação. │── 📁 components │ │── 📄 Card.js // Componente que exibe cada tarefa na lista. Permite concluir ou excluir tarefas. │ │── 📄 NewTask.js // Componente que permite a adição de novas tarefas.
 
-jsx
-Copiar
-Editar
-useEffect(() => {
-  localStorage.setItem("minhaLista", JSON.stringify(tarefas));
-}, [tarefas]);
-3. Funções Principais
-Adicionar Nova Tarefa
-jsx
-Copiar
-Editar
-function addNewTask(tarefa) {
-  setTarefa((prevTarefa) => [...prevTarefa, tarefa]);
-}
-Essa função adiciona uma nova tarefa ao estado.
 
-Concluir ou Reabrir Tarefa
-jsx
-Copiar
-Editar
-function concluirTarefa(id) {
-  setTarefa((prevTarefas) =>
-    prevTarefas.map((tarefa) =>
-      tarefa.id === id ? { ...tarefa, status: !tarefa.status } : tarefa
-    )
-  );
-}
-Essa função altera o status da tarefa de concluída para não concluída e vice-versa.
+## Componente Principal: `App.js`
 
-Remover Tarefa
-jsx
-Copiar
-Editar
-function removeTask(idDoItem) {
-  const newTask = tarefas.filter((item) => item.id !== idDoItem);
-  setTarefa(newTask);
-}
-Remove a tarefa da lista filtrando o item com o id passado.
+O componente `App.js` é responsável por gerenciar o estado da lista de tarefas e suas interações. Ele usa o `useState` para manter o estado das tarefas e o `useEffect` para persistir as alterações no **LocalStorage**. Além disso, ele passa funções de manipulação dos dados (adicionar, concluir e remover tarefas) como props para os componentes filhos.
 
-Componente Card.js
-O componente Card representa cada tarefa da lista e permite ao usuário concluir ou excluir a tarefa. Ele recebe as propriedades name, descricao, id, status e funções de removeTask e concluirTarefa como props.
+### Estado
 
-Exemplo de código do componente Card.js:
+- **tarefas**: É um array que contém todas as tarefas. Cada tarefa é um objeto com as propriedades: `id`, `name`, e `status`.
 
-jsx
-Copiar
-Editar
-function Card({ name, descricao, removeTask, id, status, concluirTarefa }) {
-  return (
-    <div className={`card ${status ? "done" : ""}`}>
-      <h3>{name}</h3>
-      <p>{descricao}</p>
-      <div className="buttons">
-        <button onClick={() => removeTask(id)}>Excluir</button>
-        <button onClick={() => concluirTarefa(id)}>
-          {status ? "Reabrir" : "Concluir"}
-        </button>
-      </div>
-    </div>
-  );
-}
-A classe done é aplicada quando a tarefa está concluída, alterando sua aparência (ex: texto tachado).
+### Funções
 
-Componente NewTask.js
-O componente NewTask permite ao usuário adicionar novas tarefas. Ele exibe um formulário com dois campos: um para o nome da tarefa e outro para a descrição. Ao submeter, a tarefa é adicionada ao estado em App.js.
+- **addNewTask(tarefa)**: Adiciona uma nova tarefa ao estado `tarefas`. A nova tarefa é recebida como parâmetro e é inserida no array de tarefas.
+  
+- **concluirTarefa(id)**: Altera o status da tarefa correspondente ao ID fornecido. O status é alterado de concluída para não concluída e vice-versa.
+  
+- **removeTask(idDoItem)**: Remove a tarefa da lista de tarefas, filtrando a tarefa com o ID fornecido.
 
-Exemplo de código do componente NewTask.js:
+### Persistência com LocalStorage
 
-jsx
-Copiar
-Editar
-function NewTask({ addNewTask }) {
-  const [name, setName] = useState("");
-  const [descricao, setDescricao] = useState("");
+O estado das tarefas é salvo no **LocalStorage** para garantir que os dados persistam mesmo após o fechamento do navegador. Toda vez que o estado de `tarefas` é atualizado, ele é salvo novamente no LocalStorage.
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (!name.trim()) return;
+## Componente `NewTask.js`
 
-    addNewTask({ id: Date.now(), name, descricao, status: false });
-    setName("");
-    setDescricao("");
-  }
+O componente `NewTask.js` é responsável por permitir a adição de novas tarefas. Ele exibe um formulário com campos para o nome e a descrição da tarefa. Quando o usuário submete o formulário, a tarefa é adicionada ao estado do componente principal (`App.js`), e os campos de entrada são limpos.
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nova tarefa" />
-      <input value={descricao} onChange={(e) => setDescricao(e.target.value)} placeholder="Descrição" />
-      <button type="submit">Adicionar</button>
-    </form>
-  );
-}
-Estilização (CSS)
-A estilização da aplicação é feita com CSS. Algumas das classes mais importantes são:
+### Estado
 
-.done: Estilo aplicado às tarefas concluídas.
-css
-Copiar
-Editar
-.done {
-  background-color: rgb(33, 128, 33);
-  text-decoration: line-through;
-  color: white;
-}
-Melhorias Futuras
-Filtros para listar tarefas concluídas ou pendentes.
-Animações ao concluir ou remover tarefas.
-Autenticação para salvar tarefas de forma persistente para cada usuário em diferentes dispositivos.
-Conclusão
-Este projeto demonstra um CRUD básico (Criar, Ler, Atualizar, Deletar) usando React e LocalStorage. Ele pode ser estendido com diversas funcionalidades, como filtros de tarefas e aprimoramento da UI/UX.
+- **name**: Nome da tarefa inserido pelo usuário.
+- **descricao**: Descrição da tarefa inserida pelo usuário.
+
+### Função
+
+- **handleSubmit(e)**: Previne o comportamento padrão de envio do formulário e chama a função `addNewTask` passada como prop para adicionar a nova tarefa ao estado do componente principal.
+
+## Componente `Card.js`
+
+O componente `Card.js` é responsável por exibir cada tarefa individualmente na lista. Ele mostra o nome da tarefa e oferece dois botões de interação:
+
+- O botão "Concluir" altera o status da tarefa para concluída (ou a marca de volta como não concluída).
+- O botão "Excluir" remove a tarefa da lista.
+
+### Propriedades Recebidas
+
+- **name**: Nome da tarefa.
+- **id**: ID único da tarefa.
+- **status**: Status de conclusão da tarefa.
+- **removeTask**: Função para remover a tarefa.
+- **concluirTarefa**: Função para alterar o status da tarefa (concluir ou reabrir).
+
+
+### Algumas classes importantes
+
+- **`.done`**: Estilo aplicado às tarefas concluídas, com fundo verde.
+- **`.card`**: Estilo do cartão de cada tarefa, incluindo o layout e a disposição dos botões.
+
+## Melhorias Futuras
+
+- **Filtros de tarefas**: Adicionar filtros para visualizar apenas tarefas pendentes ou concluídas.
+- **Design Responsivo**: Melhorar a responsividade para dispositivos móveis.
+- **Funcionalidade de Edição**: Permitir ao usuário editar o nome da tarefa.
+- **Autenticação de Usuário**: Implementar autenticação para salvar as tarefas associadas a um usuário específico, utilizando uma API ou banco de dados.
+
+## Como Contribuir
+
+1. Fork o repositório.
+2. Crie uma branch com sua feature: `git checkout -b minha-feature`.
+3. Faça suas alterações e commite-as: `git commit -am 'Adicionando minha feature'`.
+4. Envie para a branch original: `git push origin minha-feature`.
+5. Abra um pull request.
+
+## Licença
+
+Este projeto está licenciado sob a **MIT License**.
