@@ -17,6 +17,11 @@ function App() {
     setTarefa((prevTarefa) => [...prevTarefa, tarefa]);
   }
 
+  function concluirTarefa(id) {
+    setTarefa((prevTarefas) => prevTarefas.map((tarefa) => tarefa.id === id ? {...tarefa, status: !tarefa.status} : tarefa)  
+    )
+  }
+
   function removeTask(idDoItem) {
     const newTask = tarefas.filter((item) => item.id !== idDoItem);
     setTarefa(newTask);
@@ -31,11 +36,12 @@ function App() {
       {tarefas.map((tarefa) => (
         <Card
           name={tarefa.name}
-          descricao={tarefa.descricao}
           key={tarefa.id}
           id={tarefa.id}
           removeTask={removeTask}
           status={tarefa.status}
+
+          concluirTarefa={concluirTarefa}
         />
       ))}
     </div>

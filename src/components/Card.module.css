@@ -11,59 +11,37 @@
 }
 
 .container h3 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     padding: 15px;
-    max-width: 35%;
-    min-width: 35%; 
-    height: 150px;
-    border-right: 1px solid black;
-    border-radius: 10px;
-    background-color: rgba(0, 128, 0, 0.171);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-}
-.container p {
-    background-color: rgba(0, 0, 0, 0.212);
-    width: 100%;
     height: 100%;
+    width: 100%;
+    background-color: rgba(0, 128, 0, 0.171);
+    box-sizing: border-box;
 }
 
-.x {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 25px;
-    height: 25px;
-    border-bottom: 1px solid black;
-    border-left: 1px solid black;
-    border-bottom-left-radius: 5px;
+.containerButtons {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    /* gap: 5px; */
 }
+
+.button {
+    border: 1px solid black;
+    width: 60px;
+    height: 50%;
+    padding: 5px;
+    cursor: pointer;
+}
+
 
 button {
     border: none;
 }
 
-.x:hover {
+.button:hover {
     background-color: red;
     transition: 700ms;
 }
 
-.status {
-    width: 90%;
-    border: 1px solid black;
-    height: 150px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    position: relative;
-    overflow: hidden;
-    background-color: rgb(33, 128, 33);
+.done {
+    background-color:  rgb(102, 189, 138);
 }

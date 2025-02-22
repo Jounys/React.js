@@ -3,23 +3,21 @@ import styles from "./NewTask.module.css";
 import { useState } from "react";
 
 function NewTask({ addNewTask }) {
+
   const [name, setName] = useState("");
-  const [descricao, setDescricao] = useState("");
 
   function submitForm(e) {
     e.preventDefault();
 
-    // if (!name.trim() || !descricao.trim()) return; // Evita tarefas vazias
-    if (!name.trim() || !descricao.trim()) {
+    // if (!name.trim()) return; // Evita tarefas vazias
+    if (!name.trim()) {
       console.log("name.trim():", name.trim(), "Retorna:", !name.trim());
-      console.log("descricao.trim():", descricao.trim(), "Retorna:", !descricao.trim());
       return;
     }
 
-    const tarefa = { id: Date.now(), name, descricao, status: true };
+    const tarefa = { id: Date.now(), name, status: false };
     addNewTask(tarefa);
     setName("");
-    setDescricao("");
   }
 
   return (
@@ -31,17 +29,8 @@ function NewTask({ addNewTask }) {
           id="title"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          maxLength="40"
+          maxLength="60"
         />
-
-        <label htmlFor="description">Descrição:</label>
-        <input
-          type="text"
-          id="description"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-        />
-
         <input type="submit" value="Enviar" />
       </form>
     </div>
