@@ -6,7 +6,7 @@ Este projeto é uma **lista de tarefas (To-Do List)** desenvolvida com **React.j
 
 # Disponível online através da Vercel.
 
-    [App TO-DO-LIST](https://app-sigma-ashen.vercel.app/)
+[App TO-DO-LIST](https://app-sigma-ashen.vercel.app/)
 
 
 ## Tecnologias Utilizadas
